@@ -20,7 +20,7 @@ PlayState = Class{__includes = BaseState}
 
 function PlayState:init()
     -- start our transition alpha at full, so we fade in
-    self.transitionAlpha = 255
+    self.transitionAlpha = 1
 
     -- position in the grid which we're highlighting
     self.boardHighlightX = 0
@@ -77,7 +77,7 @@ function PlayState:update(dt)
     if self.timer <= 0 then
         -- clear timers from prior PlayStates
         Timer.clear()
-        
+
         gSounds['game-over']:play()
 
         gStateMachine:change('game-over', {
@@ -122,7 +122,7 @@ function PlayState:update(dt)
             -- if same tile as currently highlighted, deselect
             local x = self.boardHighlightX + 1
             local y = self.boardHighlightY + 1
-            
+
             -- if nothing is highlighted, highlight current tile
             if not self.highlightedTile then
                 self.highlightedTile = self.board.tiles[y][x]
@@ -181,7 +181,7 @@ function PlayState:calculateMatches()
 
     -- if we have any matches, remove them and tween the falling blocks that result
     local matches = self.board:calculateMatches()
-    
+
     if matches then
         gSounds['match']:stop()
         gSounds['match']:play()
@@ -200,7 +200,7 @@ function PlayState:calculateMatches()
         -- first, tween the falling tiles over 0.25s
         Timer.tween(0.25, tilesToFall):finish(function()
             local newTiles = self.board:getNewTiles()
-            
+
             -- then, tween new tiles that spawn from the ceiling over 0.25s to fill in
             -- the new upper gaps that exist
             Timer.tween(0.25, newTiles):finish(function()
@@ -224,7 +224,7 @@ function PlayState:render()
         -- multiply so drawing white rect makes it brighter
         love.graphics.setBlendMode('add')
 
-        love.graphics.setColor(255, 255, 255, 96)
+        love.graphics.setColor(1, 1, 1, .38)
         love.graphics.rectangle('fill', (self.highlightedTile.gridX - 1) * 32 + (VIRTUAL_WIDTH - 272),
             (self.highlightedTile.gridY - 1) * 32 + 16, 32, 32, 4)
 
@@ -234,9 +234,9 @@ function PlayState:render()
 
     -- render highlight rect color based on timer
     if self.rectHighlighted then
-        love.graphics.setColor(217, 87, 99, 255)
+        love.graphics.setColor(.85, .341, .39, 1)
     else
-        love.graphics.setColor(172, 50, 50, 255)
+        love.graphics.setColor(.67, .17, .17, 1)
     end
 
     -- draw actual cursor rect
@@ -245,10 +245,10 @@ function PlayState:render()
         self.boardHighlightY * 32 + 16, 32, 32, 4)
 
     -- GUI text
-    love.graphics.setColor(56, 56, 56, 234)
+    love.graphics.setColor(.22, .22, .22, .92)
     love.graphics.rectangle('fill', 16, 16, 186, 116, 4)
 
-    love.graphics.setColor(99, 155, 255, 255)
+    love.graphics.setColor(.39, .61, 1, 1)
     love.graphics.setFont(gFonts['medium'])
     love.graphics.printf('Level: ' .. tostring(self.level), 20, 24, 182, 'center')
     love.graphics.printf('Score: ' .. tostring(self.score), 20, 52, 182, 'center')

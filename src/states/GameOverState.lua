@@ -17,7 +17,7 @@ function GameOverState:init()
 end
 
 function GameOverState:enter(params)
-    self.score = params.score 
+    self.score = params.score
 end
 
 function GameOverState:update(dt)
@@ -29,10 +29,10 @@ end
 function GameOverState:render()
     love.graphics.setFont(gFonts['large'])
 
-    love.graphics.setColor(56, 56, 56, 234)
+    love.graphics.setColor(.22, .22, .22, .912)
     love.graphics.rectangle('fill', VIRTUAL_WIDTH / 2 - 64, 64, 128, 136, 4)
 
-    love.graphics.setColor(99, 155, 255, 255)
+    love.graphics.setColor(.388, .608, 1, 1)
     love.graphics.printf('GAME OVER', VIRTUAL_WIDTH / 2 - 64, 64, 128, 'center')
     love.graphics.setFont(gFonts['medium'])
     love.graphics.printf('Your Score: ' .. tostring(self.score), VIRTUAL_WIDTH / 2 - 64, 140, 128, 'center')
