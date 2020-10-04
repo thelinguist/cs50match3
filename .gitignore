@@ -1,0 +1,5 @@
+build
+output
+_lesson
+*.DS_Store
+.idea
