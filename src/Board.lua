@@ -13,9 +13,10 @@
 
 Board = Class{}
 
-function Board:init(x, y)
+function Board:init(x, y, difficulty)
     self.x = x
     self.y = y
+    self.difficulty = difficulty or math.random(1,6)
     self.matches = {}
 
     self:initializeTiles()
@@ -25,13 +26,13 @@ function Board:initializeTiles()
     self.tiles = {}
 
     for tileY = 1, 8 do
-        
+
         -- empty table that will serve as a new row
         table.insert(self.tiles, {})
 
         for tileX = 1, 8 do
             -- create a new tile at X,Y with a random color and variety
-            table.insert(self.tiles[tileY], Tile(tileX, tileY, math.random(18), math.random(6)))
+            table.insert(self.tiles[tileY], Tile(tileX, tileY, math.random(18), self.difficulty))
         end
     end
 
@@ -44,7 +45,7 @@ end
 
 --[[
     Goes left to right, top to bottom in the board, calculating matches by counting consecutive
-    tiles of the same color. Doesn't need to check the last tile in every row or column if the 
+    tiles of the same color. Doesn't need to check the last tile in every row or column if the
     last two haven't been a match.
 ]]
 function Board:calculateMatches()
@@ -58,7 +59,7 @@ function Board:calculateMatches()
         local colorToMatch = self.tiles[y][1].color
 
         matchNum = 1
-        
+
         -- every horizontal tile
         for x = 2, 8 do
             -- if this is the same color as the one we're trying to match...
@@ -94,7 +95,7 @@ function Board:calculateMatches()
         -- account for the last row ending with a match
         if matchNum >= 3 then
             local match = {}
-            
+
             -- go backwards from end of last row by matchNum
             for x = 8, 8 - matchNum + 1, -1 do
                 table.insert(match, self.tiles[y][x])
@@ -139,7 +140,7 @@ function Board:calculateMatches()
         -- account for the last column ending with a match
         if matchNum >= 3 then
             local match = {}
-            
+
             -- go backwards from end of last row by matchNum
             for y = 8, 8 - matchNum, -1 do
                 table.insert(match, self.tiles[y][x])
@@ -187,7 +188,7 @@ function Board:getFallingTiles()
         while y >= 1 do
             -- if our last tile was a space...
             local tile = self.tiles[y][x]
-            
+
             if space then
                 -- if the current tile is *not* a space, bring this down to the lowest space
                 if tile then
@@ -210,7 +211,7 @@ function Board:getFallingTiles()
                 end
             elseif tile == nil then
                 space = true
-                
+
                 if spaceY == 0 then
                     spaceY = y
                 end

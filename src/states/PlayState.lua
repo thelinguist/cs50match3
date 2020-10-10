@@ -38,6 +38,9 @@ function PlayState:init()
     self.score = 0
     self.timer = 60
 
+    -- tween helper to show plusOne second graphic
+    self.plusOne = 0
+
     -- set our Timer class to turn cursor highlight on and off
     Timer.every(0.5, function()
         self.rectHighlighted = not self.rectHighlighted
@@ -189,6 +192,12 @@ function PlayState:calculateMatches()
         -- add score for each match
         for k, match in pairs(matches) do
             self.score = self.score + #match * 50
+            self.timer = self.timer + 1
+            self.plusOne = 100
+            Timer.tween(1, {
+                [self] = {plusOne = 0}
+            })
+
         end
 
         -- remove any tiles that matched from the board, making empty spaces
@@ -199,7 +208,7 @@ function PlayState:calculateMatches()
 
         -- first, tween the falling tiles over 0.25s
         Timer.tween(0.25, tilesToFall):finish(function()
-            --self:calculateMatches()
+            self:calculateMatches()
             --local newTiles = self.board:getNewTiles()
             --
             ---- then, tween new tiles that spawn from the ceiling over 0.25s to fill in
@@ -255,4 +264,9 @@ function PlayState:render()
     love.graphics.printf('Score: ' .. tostring(self.score), 20, 52, 182, 'center')
     love.graphics.printf('Goal : ' .. tostring(self.scoreGoal), 20, 80, 182, 'center')
     love.graphics.printf('Timer: ' .. tostring(self.timer), 20, 108, 182, 'center')
+
+    if(self.plusOne > 0) then
+        love.graphics.setColor(0, 1, 1, self.plusOne / 100)
+        love.graphics.printf("+1", 65, 108 + (self.plusOne - 100), 182, 'center')
+    end
 end

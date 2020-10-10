@@ -24,6 +24,10 @@ function GameOverState:update(dt)
     if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
         gStateMachine:change('start')
     end
+
+    if love.keyboard.wasPressed('escape') then
+        love.event.quit()
+    end
 end
 
 function GameOverState:render()

@@ -26,10 +26,11 @@ function GenerateTileQuads(atlas)
     -- 9 rows of tiles
     for row = 1, 9 do
         -- two sets of 6 cols, different tile varietes
-        for i = 1, 2 do
+        for colorGroup = 1, 2 do
             tiles[counter] = {}
-            
-            for col = 1, 6 do
+
+            for shape = 1, 6 do
+                --tiles[counter][shape] = {}
                 table.insert(tiles[counter], love.graphics.newQuad(
                     x, y, 32, 32, atlas:getDimensions()
                 ))

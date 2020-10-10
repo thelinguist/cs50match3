@@ -40,7 +40,7 @@ end
 
 function Tile:render(x, y)
     -- draw shadow
-    love.graphics.setColor(34, 32, 52, 255)
+    love.graphics.setColor(.133, .125, .204, 1)
     love.graphics.draw(gTextures['main'], gFrames['tiles'][self.color][self.variety],
         self.x + x + 2, self.y + y + 2)
 
