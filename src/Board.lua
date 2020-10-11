@@ -73,11 +73,11 @@ function Board:calculateMatches()
     -- horizontal matches first
     for y = 1, 8 do
         local colorToMatch = self.tiles[y][1].color
-
-        matchNum = 1
         if self.tiles[y][1].isMega then
             hasMega = true
         end
+
+        matchNum = 1
 
         -- every horizontal tile
         for x = 2, 8 do
@@ -90,6 +90,9 @@ function Board:calculateMatches()
             else
                 -- set this as the new color we want to watch for
                 colorToMatch = self.tiles[y][x].color
+                if self.tiles[y][x].isMega then
+                    hasMega = true
+                end
 
                 -- if we have a match of 3 or more up to now, add it to our matches table
                 if matchNum >= 3 then
@@ -117,7 +120,6 @@ function Board:calculateMatches()
                 end
 
                 matchNum = 1
-                hasMega = false
             end
         end
 
@@ -138,16 +140,18 @@ function Board:calculateMatches()
 
             table.insert(matches, match)
         end
+
+        hasMega = false
     end
 
     -- vertical matches
     for x = 1, 8 do
         local colorToMatch = self.tiles[1][x].color
-
-        matchNum = 1
         if self.tiles[1][x].isMega then
             hasMega = true
         end
+
+        matchNum = 1
 
         -- every vertical tile
         for y = 2, 8 do
@@ -158,6 +162,9 @@ function Board:calculateMatches()
                 end
             else
                 colorToMatch = self.tiles[y][x].color
+                if self.tiles[y][x].isMega then
+                    hasMega = true
+                end
 
                 if matchNum >= 3 then
                     local match = {}
@@ -177,7 +184,6 @@ function Board:calculateMatches()
                 end
 
                 matchNum = 1
-                hasMega = false
 
                 -- don't need to check last two if they won't be in a match
                 if y >= 7 then
@@ -204,6 +210,7 @@ function Board:calculateMatches()
 
             table.insert(matches, match)
         end
+        hasMega = false
     end
 
     -- store matches for later reference

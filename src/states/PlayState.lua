@@ -104,7 +104,27 @@ function PlayState:update(dt)
         })
     end
 
+    local selectPressed = love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return')
+
     if self.canInput then
+        if gLocation.x and gLocation.y then
+            -- find where it is in relation to tiles
+            local boardX = gLocation.x - (VIRTUAL_WIDTH - 272) --where we placed the board in init
+            local boardY = gLocation.y - 16
+            local tileX = math.floor(boardX / 32) -- 32 is width of tile
+            local tileY = math.floor(boardY / 32) -- 32 is width of tile
+            if tileX >= 0 and tileX < 8 and tileY >= 0 and tileY < 8 then
+                self.boardHighlightX = tileX
+                self.boardHighlightY = tileY
+                selectPressed = true
+            end
+
+            -- clear so we don't repeat this
+            gLocation = {
+                x = nil,
+                y = nil
+            }
+        end
         -- move cursor around based on bounds of grid, playing sounds
         if love.keyboard.wasPressed('up') then
             self.boardHighlightY = math.max(0, self.boardHighlightY - 1)
@@ -121,7 +141,7 @@ function PlayState:update(dt)
         end
 
         -- if we've pressed enter, to select or deselect a tile...
-        if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
+        if selectPressed then
             -- if same tile as currently highlighted, deselect
             local x = self.boardHighlightX + 1
             local y = self.boardHighlightY + 1

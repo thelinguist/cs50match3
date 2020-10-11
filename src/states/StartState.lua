@@ -68,8 +68,32 @@ function StartState:update(dt)
         love.event.quit()
     end
 
+    local selectPressed = love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return')
+
     -- as long as can still input, i.e., we're not in a transition...
     if not self.pauseInput then
+        if gLocation.x and gLocation.y then
+            -- find where it is in relation to tiles
+
+            local boardXMin = gLocation.x - (VIRTUAL_WIDTH / 2 - 76) --where we placed the options in init
+            local boardYMin = gLocation.y - (VIRTUAL_HEIGHT / 2 + 12)
+            if boardXMin >= 0 and boardXMin < 150 and boardYMin >= 0 then
+                if boardYMin <= (58/2) then
+                    self.currentMenuItem = 1
+                    selectPressed = true
+                elseif boardYMin < 58 then
+                    self.currentMenuItem = 2
+                    selectPressed = true
+                end
+            end
+
+            -- clear so we don't repeat this
+            gLocation = {
+                x = nil,
+                y = nil
+            }
+        end
+
         -- change menu selection
         if love.keyboard.wasPressed('up') or love.keyboard.wasPressed('down') then
             self.currentMenuItem = self.currentMenuItem == 1 and 2 or 1
@@ -77,7 +101,7 @@ function StartState:update(dt)
         end
 
         -- switch to another state via one of the menu options
-        if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
+        if selectPressed then
             if self.currentMenuItem == 1 then
                 -- tween, using Timer, the transition rect's alpha to 1, then
                 -- transition to the BeginGame state after the animation is over

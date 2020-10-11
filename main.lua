@@ -55,7 +55,7 @@ function love.load()
     -- initialize our virtual resolution
     push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
         vsync = true,
-        fullscreen = false,
+        fullscreen = true,
         resizable = true
     })
 
@@ -78,6 +78,10 @@ function love.load()
 
     -- initialize input table
     love.keyboard.keysPressed = {}
+    gLocation = {
+        x = nil,
+        y = nil
+    }
 end
 
 function love.resize(w, h)
@@ -88,6 +92,23 @@ function love.keypressed(key)
     -- add to our table of keys pressed this frame
     love.keyboard.keysPressed[key] = true
 end
+
+function love.mousepressed(x, y, button)
+    local x,y  = push:toGame(x,y)
+    gLocation = {
+        x = x,
+        y = y
+    }
+end
+
+function love.touchpressed(x, y)
+    local x,y  = push:toGame(x,y)
+    gLocation = {
+        x = x,
+        y = y
+    }
+end
+
 
 function love.keyboard.wasPressed(key)
     if love.keyboard.keysPressed[key] then

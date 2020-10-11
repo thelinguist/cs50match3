@@ -21,7 +21,24 @@ function GameOverState:enter(params)
 end
 
 function GameOverState:update(dt)
-    if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
+    local selectPressed = love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return')
+    if gLocation.x and gLocation.y then
+        -- find where it is in relation to tiles
+
+        local boardXMin = gLocation.x
+        local boardYMin = gLocation.y
+        if boardXMin >= 0 and boardYMin >= 0 then
+            selectPressed = true
+        end
+
+        -- clear so we don't repeat this
+        gLocation = {
+            x = nil,
+            y = nil
+        }
+    end
+
+    if selectPressed then
         gStateMachine:change('start')
     end
 
