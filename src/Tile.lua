@@ -24,7 +24,7 @@ function Tile:init(x, y, color, variety, isMega)
     self.y = (self.gridY - 1) * 32
 
     -- tile appearance/points
-    self.color = color
+    self.color = color * 3
     self.variety = variety
 
     self.megaHighlight = 0

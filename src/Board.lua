@@ -42,7 +42,7 @@ function Board:initializeTiles()
                     Tile(
                             tileX,
                             tileY,
-                            math.random(18),
+                            math.random(6),
                             math.random(1, self.difficulty),
                             tileY == localMegaTile.y and tileX == localMegaTile.x
                     )
@@ -61,6 +61,7 @@ end
     Goes left to right, top to bottom in the board, calculating matches by counting consecutive
     tiles of the same color. Doesn't need to check the last tile in every row or column if the
     last two haven't been a match.
+    BUG: 4 in a column with mega and mega doesnt' work
 ]]
 function Board:calculateMatches()
     local matches = {}
@@ -74,7 +75,9 @@ function Board:calculateMatches()
         local colorToMatch = self.tiles[y][1].color
 
         matchNum = 1
-        hasMega = false
+        if self.tiles[y][1].isMega then
+            hasMega = true
+        end
 
         -- every horizontal tile
         for x = 2, 8 do
@@ -142,7 +145,9 @@ function Board:calculateMatches()
         local colorToMatch = self.tiles[1][x].color
 
         matchNum = 1
-        hasMega = false
+        if self.tiles[1][x].isMega then
+            hasMega = true
+        end
 
         -- every vertical tile
         for y = 2, 8 do
@@ -279,7 +284,7 @@ function Board:getFallingTiles()
 
             -- if the tile is nil, we need to add a new one
             if not tile then
-                local tile = Tile(x, y, math.random(18), self.difficulty)
+                local tile = Tile(x, y, math.random(6), self.difficulty)
                 tile.y = -32
                 self.tiles[y][x] = tile
 
