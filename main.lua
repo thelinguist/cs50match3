@@ -38,6 +38,10 @@ WINDOW_HEIGHT = 720
 VIRTUAL_WIDTH = 512
 VIRTUAL_HEIGHT = 288
 
+function love.conf(t)
+    t.console = true
+end
+
 function love.load()
     -- initialize our nearest-neighbor filter
     love.graphics.setDefaultFilter('nearest', 'nearest')
@@ -70,7 +74,7 @@ function love.load()
 
     -- keep track of scrolling our background on the X axis
     backgroundX = 0
-    backgroundScrollSpeed = 80
+    backgroundScrollSpeed = 40
 
     -- initialize input table
     love.keyboard.keysPressed = {}
@@ -96,7 +100,7 @@ end
 function love.update(dt)
     -- scroll background, used across all states
     backgroundX = backgroundX - backgroundScrollSpeed * dt
-    
+
     -- if we've scrolled the entire image, reset it to 0
     if backgroundX <= -1024 + VIRTUAL_WIDTH - 4 + 51 then
         backgroundX = 0
@@ -112,7 +116,7 @@ function love.draw()
 
     -- scrolling background drawn behind every state
     love.graphics.draw(gTextures['background'], backgroundX, 0)
-    
+
     gStateMachine:render()
     push:finish()
 end

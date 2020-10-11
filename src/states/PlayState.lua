@@ -62,7 +62,7 @@ function PlayState:enter(params)
     self.level = params.level
 
     -- spawn a board and place it toward the right
-    self.board = params.board or Board(VIRTUAL_WIDTH - 272, 16)
+    self.board = params.board or Board(VIRTUAL_WIDTH - 272, 16, self.level)
 
     -- grab score from params if it was passed
     self.score = params.score or 0
@@ -191,7 +191,11 @@ function PlayState:calculateMatches()
 
         -- add score for each match
         for k, match in pairs(matches) do
-            self.score = self.score + #match * 50
+            local highestBonus = 0
+            for j, tile in pairs(match) do
+                highestBonus = math.max(tile.variety, highestBonus)
+            end
+            self.score = self.score + #match * 50 + ((highestBonus -1) * 50)
             self.timer = self.timer + 1
             self.plusOne = 100
             Timer.tween(1, {
